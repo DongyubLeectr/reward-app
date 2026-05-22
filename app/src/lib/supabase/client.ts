@@ -11,7 +11,11 @@
 
 import { createBrowserClient } from '@supabase/ssr';
 
-let _client: ReturnType<typeof createBrowserClient> | null = null;
+// types/db.ts로 명시적 타입을 따로 관리하므로 Database 제네릭은 any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Db = any;
+
+let _client: ReturnType<typeof createBrowserClient<Db>> | null = null;
 
 /** 싱글톤 브라우저 클라이언트 */
 export function getBrowserClient() {
@@ -26,6 +30,6 @@ export function getBrowserClient() {
     );
   }
 
-  _client = createBrowserClient(url, anonKey);
+  _client = createBrowserClient<Db>(url, anonKey);
   return _client;
 }

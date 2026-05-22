@@ -13,11 +13,17 @@
  */
 
 import 'server-only';                     // 클라이언트 import 시 빌드 에러 발생시킴
-import { createClient } from '@supabase/supabase-js';
+import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
-let _admin: ReturnType<typeof createClient> | null = null;
+// 정식 Database 타입을 따로 정의하지 않고 any로 두는 이유:
+//   - supabase gen types 도구를 안 쓰기로 결정 (5/27 단일 행사라 시간 효율 우선)
+//   - 우리 코드에서는 types/db.ts의 인터페이스로 충분히 타입 안전성 확보
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Db = any;
 
-export function getAdminClient() {
+let _admin: SupabaseClient<Db> | null = null;
+
+export function getAdminClient(): SupabaseClient<Db> {
   if (_admin) return _admin;
 
   const url        = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -29,7 +35,7 @@ export function getAdminClient() {
     );
   }
 
-  _admin = createClient(url, serviceKey, {
+  _admin = createClient<Db>(url, serviceKey, {
     auth: {
       persistSession:   false,
       autoRefreshToken: false,

@@ -83,9 +83,10 @@ export function AdminDashboard({
     const channel = supabase
       .channel('admin-dashboard')
       // settings 갱신
-      .on('postgres_changes',
+      .on(
+        'postgres_changes',
         { event: 'UPDATE', schema: 'public', table: 'settings', filter: 'id=eq.1' },
-        (payload) => setSettings(payload.new as Settings)
+        (payload: { new: Settings }) => setSettings(payload.new)
       )
       // teams 갱신 (이름·순서·status)
       .on('postgres_changes',

@@ -38,9 +38,10 @@ export function ResultDisplay({ initialSettings, initialResults }: Props) {
 
     const channel = supabase
       .channel('result-watch')
-      .on('postgres_changes',
+      .on(
+        'postgres_changes',
         { event: 'UPDATE', schema: 'public', table: 'settings', filter: 'id=eq.1' },
-        (payload) => setSettings(payload.new as Settings)
+        (payload: { new: Settings }) => setSettings(payload.new)
       )
       .on('postgres_changes',
         { event: '*', schema: 'public', table: 'scores' },

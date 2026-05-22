@@ -12,6 +12,10 @@
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 
+// types/db.ts로 명시적 타입을 따로 관리하므로 Database 제네릭은 any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Db = any;
+
 export async function getServerClient() {
   const url     = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -24,7 +28,7 @@ export async function getServerClient() {
 
   const cookieStore = await cookies();
 
-  return createServerClient(url, anonKey, {
+  return createServerClient<Db>(url, anonKey, {
     cookies: {
       getAll() {
         return cookieStore.getAll();

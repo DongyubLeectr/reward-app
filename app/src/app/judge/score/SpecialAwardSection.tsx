@@ -29,10 +29,11 @@ export function SpecialAwardSection({
   const [error,   setError]        = useState<string | null>(null);
 
   // 본인 담당 특별상이 없으면 (이동옥/정향모) 섹션 자체를 렌더링하지 않음
-  if (!judge.special_award_type || judge.special_award_type === '공감상') {
+  // judge.special_award_type 타입이 이미 '공감상'을 제외하므로 null 체크만 하면 충분
+  if (!judge.special_award_type) {
     return null;
   }
-  const awardType = judge.special_award_type as Exclude<AwardType, '공감상'>;
+  const awardType: Exclude<AwardType, '공감상'> = judge.special_award_type;
 
   const selectedTeamId = mySpecialVote?.team_id ?? null;
   const top3Set = new Set(top3TeamIds);

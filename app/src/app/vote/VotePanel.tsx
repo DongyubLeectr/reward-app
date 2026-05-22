@@ -62,11 +62,11 @@ export function VotePanel({ teams, initialSettings, initialTop3TeamIds }: Props)
 
     const channel = supabase
       .channel('vote-watch')
-      .on('postgres_changes',
+      .on(
+        'postgres_changes',
         { event: 'UPDATE', schema: 'public', table: 'settings', filter: 'id=eq.1' },
-        (payload) => {
-          const newSettings = payload.new as Settings;
-          setVotingOpen(newSettings.empathy_voting_open);
+        (payload: { new: Settings }) => {
+          setVotingOpen(payload.new.empathy_voting_open);
         }
       )
       .on('postgres_changes',

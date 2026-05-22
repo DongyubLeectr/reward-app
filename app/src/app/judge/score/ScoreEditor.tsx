@@ -81,7 +81,8 @@ export function ScoreEditor({
   const [top3TeamIds,       setTop3TeamIds]       = useState<string[]>(initialTop3TeamIds);
   const [mySpecialVote,     setMySpecialVote]     = useState<SpecialVote | null>(() => {
     // 본인 담당 특별상 1건만 (협력/도전/토큰 중 하나)
-    if (!judge.special_award_type || judge.special_award_type === '공감상') return null;
+    // judge.special_award_type 타입이 이미 '공감상'을 제외하므로 null 체크만 하면 충분
+    if (!judge.special_award_type) return null;
     return initialSpecialVotes.find((v) => v.award_type === judge.special_award_type) ?? null;
   });
 
@@ -222,8 +223,8 @@ export function ScoreEditor({
       .on(
         'postgres_changes',
         { event: 'UPDATE', schema: 'public', table: 'settings', filter: 'id=eq.1' },
-        (payload) => {
-          const newSettings = payload.new as Settings;
+        (payload: { new: Settings }) => {
+          const newSettings = payload.new;
           setActiveTeamId(newSettings.active_team_id);
           setSpecialVotingOpen(newSettings.special_voting_open);
 
