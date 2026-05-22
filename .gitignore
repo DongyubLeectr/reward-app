@@ -1,0 +1,42 @@
+# =====================================================================
+# 워크스페이스 루트 .gitignore
+#   - app/ 폴더 안에는 자체 .gitignore도 있으므로 그 안의 룰도 함께 적용됨
+#   - 이 파일은 루트 전반에 영향을 주는 항목만 관리
+# =====================================================================
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node
+node_modules/
+
+# Next.js 빌드 산출물
+**/.next/
+**/out/
+
+# 환경변수 (예시 파일은 .env.local.example만 commit)
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+.env.test
+
+# Vercel
+.vercel/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+
+# Misc
+*.tsbuildinfo
